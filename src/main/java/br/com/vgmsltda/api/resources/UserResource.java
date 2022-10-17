@@ -1,6 +1,8 @@
 package br.com.vgmsltda.api.resources;
 
 import br.com.vgmsltda.api.domain.User;
+import br.com.vgmsltda.api.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,9 +10,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/user")
 public class UserResource {
 
+    @Autowired
+    private UserService service;
+
     @GetMapping(value ="/{id}")
     public ResponseEntity<User> findById(@PathVariable Integer id){
-        return ResponseEntity.ok().body(
-                new User(1,"Victor Gabriel ","victor_gabrielms@yahoo.com.br","123456"));
+        return ResponseEntity.ok().body(service.findById(id));
     }
 }
