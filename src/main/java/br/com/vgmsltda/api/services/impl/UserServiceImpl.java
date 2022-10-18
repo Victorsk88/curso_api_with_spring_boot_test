@@ -1,6 +1,7 @@
 package br.com.vgmsltda.api.services.impl;
 
-import br.com.vgmsltda.api.domain.User;
+import br.com.vgmsltda.api.domain.Users;
+import br.com.vgmsltda.api.exceptions.ObjectNotFoundException;
 import br.com.vgmsltda.api.repository.UserRepository;
 import br.com.vgmsltda.api.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,8 @@ public class UserServiceImpl implements UserService {
     private UserRepository repository;
 
     @Override
-    public User findById(Integer id) {
-        Optional<User> obj = repository.findById(id);
-        return obj.orElse(null);
+    public Users findById(Integer id) {
+        Optional<Users> obj = repository.findById(id);
+        return obj.orElseThrow(() -> new ObjectNotFoundException("Objeto nao encontrado de Id : " + id));
     }
 }

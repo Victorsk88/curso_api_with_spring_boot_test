@@ -1,9 +1,8 @@
 package br.com.vgmsltda.api.services;
 
-import br.com.vgmsltda.api.domain.User;
-import org.springframework.stereotype.Service;
+import br.com.vgmsltda.api.domain.Users;
 
 
 public interface UserService {
-    User findById(Integer id);
+    Users findById(Integer id);
 }
