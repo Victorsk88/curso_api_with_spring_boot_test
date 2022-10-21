@@ -1,4 +1,4 @@
-package br.com.vgmsltda.api.exceptions;
+package br.com.vgmsltda.api.services.exceptions;
 
 public class ObjectNotFoundException extends RuntimeException {
 

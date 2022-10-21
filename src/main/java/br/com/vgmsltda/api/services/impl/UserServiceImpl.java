@@ -2,7 +2,8 @@ package br.com.vgmsltda.api.services.impl;
 
 import br.com.vgmsltda.api.domain.Users;
 import br.com.vgmsltda.api.domain.dto.UserDTO;
-import br.com.vgmsltda.api.exceptions.ObjectNotFoundException;
+import br.com.vgmsltda.api.services.exceptions.DataIntegrityViolationException;
+import br.com.vgmsltda.api.services.exceptions.ObjectNotFoundException;
 import br.com.vgmsltda.api.repository.UserRepository;
 import br.com.vgmsltda.api.services.UserService;
 import org.modelmapper.ModelMapper;
@@ -33,7 +34,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Users create(UserDTO userDTO) {
+        findByEmail(userDTO);
         return repository.save(mapper.map(userDTO, Users.class));
+    }
+
+    @Override
+    public Users update(UserDTO userDTO) {
+        findByEmail(userDTO);
+        return repository.save(mapper.map(userDTO,Users.class));
+    }
+
+    private void findByEmail(UserDTO obj){
+        Optional<Users> user = repository.findByEmail(obj.getEmail());
+        if(user.isPresent() && !user.get().getId().equals(obj.getId())){
+            throw new DataIntegrityViolationException("Email já cadastrado");
+        }
     }
 
 }

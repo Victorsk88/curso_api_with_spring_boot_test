@@ -1,4 +1,4 @@
-package br.com.vgmsltda.api.exceptions;
+package br.com.vgmsltda.api.resources.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
