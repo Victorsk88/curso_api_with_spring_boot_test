@@ -3,6 +3,7 @@ package br.com.vgmsltda.api.resources;
 import br.com.vgmsltda.api.domain.Users;
 import br.com.vgmsltda.api.domain.dto.UserDTO;
 import br.com.vgmsltda.api.services.UserService;
+import org.apache.catalina.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +19,14 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/user")
 public class UserResource {
 
+    public static final String ID = "/{id}";
     @Autowired
     ModelMapper mapper;
 
     @Autowired
     private UserService service;
 
-    @GetMapping(value ="/{id}")
+    @GetMapping(value =ID)
     public ResponseEntity<UserDTO> findById(@PathVariable Integer id){
         return ResponseEntity.ok().body(mapper.map(service.findById(id),UserDTO.class));
     }
@@ -42,14 +44,20 @@ public class UserResource {
     @PostMapping
     public ResponseEntity<UserDTO> create(@RequestBody UserDTO obj){
                URI uri = ServletUriComponentsBuilder
-                       .fromCurrentRequest().path("/{id}").buildAndExpand(service.create(obj).getId()).toUri();
+                       .fromCurrentRequest().path(ID).buildAndExpand(service.create(obj).getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
 
-    @PutMapping(value ="/{id}")
+    @PutMapping(value =ID)
     public ResponseEntity<UserDTO> update(@PathVariable Integer id, @RequestBody UserDTO userDTO){
         userDTO.setId(id);
     return ResponseEntity.ok().body(mapper.map(service.update(userDTO),UserDTO.class));
+    }
+
+    @DeleteMapping(value = ID)
+    public ResponseEntity<UserDTO> delete(@PathVariable Integer id){
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
