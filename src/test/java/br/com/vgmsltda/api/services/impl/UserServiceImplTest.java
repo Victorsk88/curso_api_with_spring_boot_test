@@ -3,6 +3,7 @@ package br.com.vgmsltda.api.services.impl;
 import br.com.vgmsltda.api.domain.Users;
 import br.com.vgmsltda.api.domain.dto.UserDTO;
 import br.com.vgmsltda.api.repository.UserRepository;
+import br.com.vgmsltda.api.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyCollection;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
@@ -64,13 +66,27 @@ class UserServiceImplTest {
         assertEquals(EMAIL,response.getEmail());
 
     }
+    @Test
+    void whenFindByIdReturnThenReturnAnObjectNotFoundException(){
+        when(repository.findById(anyInt())).
+                thenThrow(new ObjectNotFoundException("Objeto nao encontrado de Id : "+ID));
 
+        try {
+            service.findById(ID);
+
+        }catch (Exception ex) {
+            assertEquals(ObjectNotFoundException.class,ex.getClass());
+            assertEquals("Objeto nao encontrado de Id : "+ID,ex.getMessage());
+        }
+    }
     @Test
     void findAll() {
     }
 
     @Test
     void create() {
+//        when(repository.save((new Users(ID,NAME,PASSWORD,EMAIL))));
+
     }
 
     @Test
