@@ -3,6 +3,7 @@ package br.com.vgmsltda.api.services.impl;
 import br.com.vgmsltda.api.domain.Users;
 import br.com.vgmsltda.api.domain.dto.UserDTO;
 import br.com.vgmsltda.api.repository.UserRepository;
+import br.com.vgmsltda.api.services.exceptions.DataIntegrityViolationException;
 import br.com.vgmsltda.api.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,8 +22,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.anyCollection;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -83,7 +83,7 @@ class UserServiceImplTest {
         }
     }
     @Test
-    void whenFindAllThenReturnAnListofUsers() {
+    void whenFindAllThenReturnAnListOfUsers() {
         when(repository.findAll()).thenReturn(List.of(user));
 
         List<Users> response = service.findAll();
@@ -97,11 +97,32 @@ class UserServiceImplTest {
     }
 
     @Test
-    void create() {
-//        when(repository.save((user)).;
+    void whenCreateThenReturnSuccess() {
+        when(repository.save(any())).thenReturn(user);
+
+        Users response =service.create(userDTO);
+
+        assertNotNull(response);
+        assertEquals(Users.class,response.getClass());
+        assertEquals(ID,response.getId());
+        assertEquals(EMAIL,response.getEmail());
+        assertEquals(NAME,response.getName());
+        assertEquals(PASSWORD, response.getPassword());
 
     }
+    @Test
+    void whenCreateThenReturnDataIntegrityViolationException() {
+        when(repository.findByEmail(anyString())).thenReturn(optionalUsers);
 
+        try {
+            optionalUsers.get().setId(2);
+            service.create(userDTO);
+        }catch (Exception ex){
+            assertEquals(DataIntegrityViolationException.class, ex.getClass());
+            assertEquals("Email já cadastrado",ex.getMessage());
+        }
+
+    }
     @Test
     void update() {
     }
