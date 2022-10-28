@@ -5,18 +5,14 @@ import br.com.vgmsltda.api.domain.dto.UserDTO;
 import br.com.vgmsltda.api.repository.UserRepository;
 import br.com.vgmsltda.api.services.exceptions.DataIntegrityViolationException;
 import br.com.vgmsltda.api.services.exceptions.ObjectNotFoundException;
-import org.junit.jupiter.api.Assertions;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.xmlunit.util.Mapper;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +30,7 @@ class UserServiceImplTest {
     public static final String EMAIL = "victor_1234@yahoo.com.br";
     public static final String PASSWORD = "1234";
     public static final int INDEX = 0;
+    public static final String EMAIL_JÁ_CADASTRADO = "Email já cadastrado";
     @InjectMocks
     private UserServiceImpl service;
 
@@ -119,16 +116,46 @@ class UserServiceImplTest {
             service.create(userDTO);
         }catch (Exception ex){
             assertEquals(DataIntegrityViolationException.class, ex.getClass());
-            assertEquals("Email já cadastrado",ex.getMessage());
+            assertEquals(EMAIL_JÁ_CADASTRADO,ex.getMessage());
         }
 
     }
     @Test
-    void update() {
+    void whenUpdateThenReturnSuccess() {
+        when(repository.save(any())).thenReturn(user);
+
+       Users response = service.update(userDTO);
+
+       assertNotNull(response);
+       assertEquals(Users.class,response.getClass());
+       assertEquals(ID,response.getId());
+        assertEquals(EMAIL,response.getEmail());
+        assertEquals(NAME,response.getName());
+        assertEquals(PASSWORD, response.getPassword());
     }
 
     @Test
-    void delete() {
+    void whenUpdateThenReturnDataIntegrationViolationException() {
+        when(repository.findByEmail(anyString())).thenReturn(optionalUsers);
+
+        try {
+            optionalUsers.get().setId(2);
+             service.update(userDTO);
+        }catch (Exception ex){
+           assertEquals(DataIntegrityViolationException.class, ex.getClass());
+           assertEquals(EMAIL_JÁ_CADASTRADO,ex.getMessage());
+        }
+
+    }
+
+    @Test
+    void whenDeleteThenReturnSuccess() {
+//        when(repository.findById(anyInt())).thenReturn(optionalUsers);
+
+//      Users response = repository.deleteById(userDTO.getId()));
+
+//        assertEquals();
+
     }
 
     private void startUser(){
