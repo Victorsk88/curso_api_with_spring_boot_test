@@ -25,7 +25,7 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 class UserResourceTest {
     public static final Integer ID = 1;
-    public static final String OBJECTNOTFOUND = "Objeto nao encontrado de Id : " + ID;
+
     public static final String NAME = "Victor";
     public static final String EMAIL = "victor_1234@yahoo.com.br";
     public static final String PASSWORD = "1234";
