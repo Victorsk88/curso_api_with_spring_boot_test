@@ -30,7 +30,7 @@ class UserResourceTest {
     public static final String EMAIL = "victor_1234@yahoo.com.br";
     public static final String PASSWORD = "1234";
     public static final int INDEX = 0;
-    public static final String EMAIL_JÁ_CADASTRADO = "Email já cadastrado";
+
 
     @InjectMocks
     private UserResource userResource;

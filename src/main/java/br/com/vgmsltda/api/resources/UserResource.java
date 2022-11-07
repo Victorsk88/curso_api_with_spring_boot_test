@@ -1,16 +1,11 @@
 package br.com.vgmsltda.api.resources;
-
-import br.com.vgmsltda.api.domain.Users;
 import br.com.vgmsltda.api.domain.dto.UserDTO;
 import br.com.vgmsltda.api.services.UserService;
-import org.apache.catalina.User;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import javax.servlet.Servlet;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
